@@ -43,7 +43,7 @@ rustworkx==0.17.1
 safetensors==0.7.0
 scikit-learn==1.8.0
 scipy==1.17.0
-sentence-transformers==5.2.0
+sentence-transformers==2.6.1
 six==1.17.0
 starlette==0.50.0
 stevedore==5.6.0
@@ -55,7 +55,7 @@ torch==2.1.2
 torchaudio==2.1.2
 torchvision==0.16.2
 tqdm==4.67.1
-transformers==4.57.6
+transformers==4.38.2
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 tzdata==2025.3
