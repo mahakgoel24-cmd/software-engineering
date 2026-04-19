@@ -1,12 +1,12 @@
-FROM python:3.11-slim
+# ---------- STAGE 1: BUILD ----------
+FROM python:3.11-slim as builder
 
-# Prevent Python buffering issues
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# System deps (required for scipy, qiskit, etc.)
+# Install build deps TEMPORARILY
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
@@ -16,17 +16,34 @@ RUN apt-get update && apt-get install -y \
 # Upgrade pip
 RUN pip install --upgrade pip
 
-# Copy requirements first (for caching)
+# Copy requirements
 COPY requirements.txt .
 
-# Install EVERYTHING in one go (IMPORTANT)
-RUN pip install --no-cache-dir --prefer-binary --upgrade-strategy eager -r requirements.txt
+# Install dependencies into custom folder
+RUN pip install --no-cache-dir --prefer-binary \
+    --prefix=/install \
+    -r requirements.txt
 
-# Copy project files
+# ---------- STAGE 2: FINAL ----------
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Copy only installed packages (NO build tools)
+COPY --from=builder /install /usr/local
+
+# Copy app
 COPY . .
 
-# Expose port
+# Remove unnecessary files to shrink image
+RUN rm -rf /root/.cache \
+    && find /usr/local -type d -name "__pycache__" -exec rm -r {} + \
+    && find /usr/local -type d -name "tests" -exec rm -r {} + \
+    && find /usr/local -name "*.pyc" -delete
+
 EXPOSE 8000
 
-# Correct Railway startup
 CMD ["sh", "-c", "uvicorn backend.api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
