@@ -1,9 +1,6 @@
-.git
-__pycache__
+venv/
+__pycache__/
 *.pyc
-*.pyo
-*.pyd
-.env
-node_modules
-data/
-models/
+.ipynb_checkpoints/
+.git/
+.gitignore
