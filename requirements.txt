@@ -12,7 +12,7 @@ filelock==3.20.3
 fsspec==2026.1.0
 h11==0.16.0
 hf-xet==1.2.0
-huggingface-hub==0.36.0
+huggingface-hub==0.20.3
 idna==3.11
 Jinja2==3.1.6
 joblib==1.5.3
@@ -50,7 +50,7 @@ stevedore==5.6.0
 symengine==0.14.1
 sympy==1.14.0
 threadpoolctl==3.6.0
-tokenizers==0.22.2
+tokenizers==0.15.2
 torch==2.1.2
 torchaudio==2.1.2
 torchvision==0.16.2
